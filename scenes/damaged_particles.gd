@@ -1,0 +1,15 @@
+extends CPUParticles2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_health_node_damaged(health: float, delta: float) -> void:
+	restart() # Replace with function body.

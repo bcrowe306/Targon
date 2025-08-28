@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dpiwi25bbn5al"
+path="res://.godot/imported/Nature - Birds - Singing and talking lovebirds.wav-5a39e91fc06036a43e7428b5b6fca32d.sample"
+
+[deps]
+
+source_file="res://resources/sfx/Nature - Birds - Singing and talking lovebirds.wav"
+dest_files=["res://.godot/imported/Nature - Birds - Singing and talking lovebirds.wav-5a39e91fc06036a43e7428b5b6fca32d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

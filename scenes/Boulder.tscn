@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://dcntqcgce5opb"]
+
+[ext_resource type="Script" uid="uid://8xl63lictxk6" path="res://rigid_body_2d.gd" id="1_cupic"]
+[ext_resource type="Texture2D" uid="uid://bvqdajunf2c16" path="res://resources/Assets/Props-Rocks.png" id="2_7fogc"]
+[ext_resource type="PackedScene" uid="uid://3oax7jqdax58" path="res://scenes/health_node.tscn" id="3_0f5hq"]
+[ext_resource type="Script" uid="uid://c7aciah5nio5m" path="res://scenes/damaged_particles.gd" id="3_mm1s3"]
+[ext_resource type="Script" uid="uid://dhwmh5a773k3g" path="res://cpu_particles_2d.gd" id="4_mm1s3"]
+[ext_resource type="Script" uid="uid://c8dpqtny3d3xw" path="res://scenes/audio_stream_player.gd" id="5_7fogc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pjgr7"]
+atlas = ExtResource("2_7fogc")
+region = Rect2(180.362, 7.64985, 6.18933, 5.78816)
+
+[sub_resource type="Gradient" id="Gradient_dbxf8"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8diqj"]
+atlas = ExtResource("2_7fogc")
+region = Rect2(160.764, 0.553013, 15.9672, 15.3211)
+
+[node name="RigidBody2D" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 15
+mass = 9.724
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, 12.12)
+script = ExtResource("1_cupic")
+
+[node name="DamagedParticles" type="CPUParticles2D" parent="."]
+position = Vector2(2, -6)
+emitting = false
+amount = 15
+texture = SubResource("AtlasTexture_pjgr7")
+lifetime = 0.37
+one_shot = true
+explosiveness = 0.63
+randomness = 0.13
+emission_shape = 1
+emission_sphere_radius = 18.07
+direction = Vector2(0, 10)
+spread = 180.0
+initial_velocity_min = 121.21
+initial_velocity_max = 187.88
+color_ramp = SubResource("Gradient_dbxf8")
+script = ExtResource("3_mm1s3")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(2.48, 2.48)
+polygon = PackedVector2Array(-9, 4, -9, 10, 10, 10, 10, 4, 5, -6, 2, -9, -2, -9)
+
+[node name="Sprite2D" type="Sprite2D" parent="CollisionPolygon2D"]
+scale = Vector2(0.348214, 0.25)
+texture = ExtResource("2_7fogc")
+region_enabled = true
+region_rect = Rect2(4.8927, 0.621014, 56.7644, 80.1023)
+
+[node name="HealthNode" parent="." instance=ExtResource("3_0f5hq")]
+
+[node name="BrokenParticles" type="CPUParticles2D" parent="."]
+position = Vector2(0, 3)
+emitting = false
+texture = SubResource("AtlasTexture_8diqj")
+lifetime = 0.32
+one_shot = true
+speed_scale = 0.61
+explosiveness = 0.65
+randomness = 0.37
+lifetime_randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 17.29
+spread = 121.02
+angular_velocity_min = 8.73
+angular_velocity_max = 69.82
+linear_accel_max = 54.55
+radial_accel_max = 12.12
+damping_max = 60.606
+angle_max = 26.2
+script = ExtResource("4_mm1s3")
+
+[node name="DiedTimer" type="Timer" parent="."]
+
+[node name="BoulderHitPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -5.876
+script = ExtResource("5_7fogc")
+
+[connection signal="damaged" from="HealthNode" to="DamagedParticles" method="_on_health_node_damaged"]
+[connection signal="damaged" from="HealthNode" to="BoulderHitPlayer" method="_on_health_node_damaged"]
+[connection signal="died" from="HealthNode" to="." method="_on_health_node_died"]
+[connection signal="died" from="HealthNode" to="BrokenParticles" method="_on_health_node_died"]
+[connection signal="finished" from="BrokenParticles" to="." method="_on_cpu_particles_2d_finished"]

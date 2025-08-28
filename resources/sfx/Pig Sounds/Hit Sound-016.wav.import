@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bhexq2xcyud5l"
+path="res://.godot/imported/Hit Sound-016.wav-e9e8f4a4fd39aeee0e3ea3477e4cb8ab.sample"
+
+[deps]
+
+source_file="res://resources/sfx/Pig Sounds/Hit Sound-016.wav"
+dest_files=["res://.godot/imported/Hit Sound-016.wav-e9e8f4a4fd39aeee0e3ea3477e4cb8ab.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

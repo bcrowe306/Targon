@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cgvc0rvuj4uic"
+path="res://.godot/imported/SFX- Vox-Female-06.wav-cebf173c487ef4f1c562d6319294c8a1.sample"
+
+[deps]
+
+source_file="res://resources/sfx/SFX- Vox-Female-06.wav"
+dest_files=["res://.godot/imported/SFX- Vox-Female-06.wav-cebf173c487ef4f1c562d6319294c8a1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

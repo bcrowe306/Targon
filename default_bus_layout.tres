@@ -1,0 +1,15 @@
+[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://daj4pgw8mxy8"]
+
+[sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_j3pel"]
+resource_name = "HighPassFilter"
+cutoff_hz = 958.0
+
+[resource]
+bus/1/name = &"Attacks"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectHighPassFilter_j3pel")
+bus/1/effect/0/enabled = true
