@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://dmr8nm6r8ve0p"]
+[gd_scene load_steps=16 format=4 uid="uid://dmr8nm6r8ve0p"]
 
 [ext_resource type="Texture2D" uid="uid://drfh0yhrnnhaq" path="res://resources/3_ Trees.png" id="1_0p32d"]
 [ext_resource type="AudioStream" uid="uid://c3cmrac43ruy5" path="res://resources/music/Game Music - Jungle Level.mp3" id="1_6b2t3"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dcntqcgce5opb" path="res://scenes/Boulder.tscn" id="7_fiuep"]
 [ext_resource type="Script" uid="uid://bo1vhj631olnb" path="res://boar_spawner.gd" id="7_my3nt"]
 [ext_resource type="PackedScene" uid="uid://8oy0m7wdy233" path="res://scenes/mob_boar_white.tscn" id="10_0w18n"]
+[ext_resource type="PackedScene" uid="uid://cq3fqq5mqwwrx" path="res://scenes/menu.tscn" id="11_buu5v"]
 [ext_resource type="TileSet" uid="uid://qwkttlxkgf3l" path="res://Default.tres" id="11_my3nt"]
 [ext_resource type="AudioStream" uid="uid://dpiwi25bbn5al" path="res://resources/sfx/Nature - Birds - Singing and talking lovebirds.wav" id="12_0w18n"]
 [ext_resource type="Script" uid="uid://dit3f17c6qf66" path="res://ambient_jungle_player.gd" id="13_my3nt"]
@@ -25,7 +26,7 @@ autoplay = true
 parameters/looping = true
 
 [node name="Background" type="Parallax2D" parent="."]
-scale = Vector2(1.67, 1.67)
+scale = Vector2(1.8, 1.8)
 scroll_scale = Vector2(0, 0)
 scroll_offset = Vector2(0, 38)
 
@@ -96,14 +97,21 @@ position = Vector2(178, 64)
 position = Vector2(4, 64)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-offset = Vector2(0, -50.795)
-zoom = Vector2(2, 2)
+offset = Vector2(0, -23.515)
+zoom = Vector2(1.7, 1.7)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 drag_horizontal_enabled = true
 drag_left_margin = 0.1
 drag_right_margin = 0.1
 drag_bottom_margin = 0.0
+
+[node name="Menu" parent="Player/Camera2D" instance=ExtResource("11_buu5v")]
+visible = false
+offset_left = -4.0
+offset_top = -64.0
+offset_right = -4.0
+offset_bottom = -64.0
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-1, -1)

@@ -4,8 +4,41 @@ enum CharacterState {
 	IDLE, RUN, JUMP, FALL, 
 	ATTACK1, ATTACK2, ATTACK3, ATTACK4, 
 	USE, WALK, CROUCH, TUMBLE, DASH, CLIMB, HANG, PUSH, PICKUP, PUTDOWN, CARRY, LAYING, 
-	HIT, HEALING, DYING, DEAD, SPAWN, RESPAWN 
+	HIT, HEALING, DYING, DEAD, SPAWN, RESPAWN, STOMP
 	}
+
+var characterStateStrings: Array[String] = [
+	"IDLE", 
+	"RUN", 
+	"JUMP", 
+	"FALL", 
+	"ATTACK1", 
+	"ATTACK2", 
+	"ATTACK3", 
+	"ATTACK4", 
+	"USE", 
+	"WALK", 
+	"CROUCH", 
+	"TUMBLE", 
+	"DASH", 
+	"CLIMB", 
+	"HANG", 
+	"PUSH", 
+	"PICKUP", 
+	"PUTDOWN", 
+	"CARRY", 
+	"LAYING", 
+	"HIT", 
+	"HEALING", 
+	"DYING", 
+	"DEAD", 
+	"SPAWN", 
+	"RESPAWN", 
+	"STOMP"
+]
+
+func getCharacterStateString(state: CharacterState):
+	return characterStateStrings[state]
 
 enum GameState {
 		MENU,

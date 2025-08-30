@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dcntqcgce5opb"]
+[gd_scene load_steps=14 format=3 uid="uid://dcntqcgce5opb"]
 
 [ext_resource type="Script" uid="uid://8xl63lictxk6" path="res://rigid_body_2d.gd" id="1_cupic"]
 [ext_resource type="Texture2D" uid="uid://bvqdajunf2c16" path="res://resources/Assets/Props-Rocks.png" id="2_7fogc"]
@@ -18,6 +18,20 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 atlas = ExtResource("2_7fogc")
 region = Rect2(160.764, 0.553013, 15.9672, 15.3211)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0f5hq"]
+radius = 9.0
+height = 50.1578
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mm1s3"]
+radius = 9.0
+height = 46.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pjgr7"]
+radius = 13.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dbxf8"]
+radius = 11.0
+
 [node name="RigidBody2D" type="RigidBody2D"]
 collision_layer = 8
 collision_mask = 15
@@ -25,6 +39,12 @@ mass = 9.724
 center_of_mass_mode = 1
 center_of_mass = Vector2(0, 12.12)
 script = ExtResource("1_cupic")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.863571, 0.62)
+texture = ExtResource("2_7fogc")
+region_enabled = true
+region_rect = Rect2(4.8927, 0.621014, 56.7644, 80.1023)
 
 [node name="DamagedParticles" type="CPUParticles2D" parent="."]
 position = Vector2(2, -6)
@@ -43,16 +63,6 @@ initial_velocity_min = 121.21
 initial_velocity_max = 187.88
 color_ramp = SubResource("Gradient_dbxf8")
 script = ExtResource("3_mm1s3")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-scale = Vector2(2.48, 2.48)
-polygon = PackedVector2Array(-9, 4, -9, 10, 10, 10, 10, 4, 5, -6, 2, -9, -2, -9)
-
-[node name="Sprite2D" type="Sprite2D" parent="CollisionPolygon2D"]
-scale = Vector2(0.348214, 0.25)
-texture = ExtResource("2_7fogc")
-region_enabled = true
-region_rect = Rect2(4.8927, 0.621014, 56.7644, 80.1023)
 
 [node name="HealthNode" parent="." instance=ExtResource("3_0f5hq")]
 
@@ -82,6 +92,29 @@ script = ExtResource("4_mm1s3")
 [node name="BoulderHitPlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -5.876
 script = ExtResource("5_7fogc")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2(-7, 1.19209e-07)
+rotation = 0.418879
+shape = SubResource("CapsuleShape2D_0f5hq")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="."]
+position = Vector2(8, 1.19209e-07)
+rotation = -0.418879
+shape = SubResource("CapsuleShape2D_0f5hq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 15)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_mm1s3")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="."]
+position = Vector2(10, 9)
+shape = SubResource("CircleShape2D_pjgr7")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="."]
+position = Vector2(6, -3)
+shape = SubResource("CircleShape2D_dbxf8")
 
 [connection signal="damaged" from="HealthNode" to="DamagedParticles" method="_on_health_node_damaged"]
 [connection signal="damaged" from="HealthNode" to="BoulderHitPlayer" method="_on_health_node_damaged"]

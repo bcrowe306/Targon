@@ -1,12 +1,14 @@
 extends CharacterBody2D
 
 @export var SPEED: float = 75.0
+@export var DAMAGE: float = 34.0
 
 signal state_changed(state: GlobalEnums.CharacterState)
 signal direction_changed(direction: int)
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_node: HealthNode = $HealthNode
+@onready var hit_area: Area2D = $HitArea
 
 @export var JUMP_VELOCITY: float = -400.0
 
@@ -58,7 +60,15 @@ func handleMovement():
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-	move_and_slide()
+	if move_and_slide():
+		for i in get_slide_collision_count():
+			var c := get_slide_collision(i)
+			var collider = c.get_collider()
+			if collider.name == "Player":
+				for child in collider.get_children():
+					#print(child.name)
+					pass
+	
 	if is_on_wall():
 		var collision_count = get_slide_collision_count()
 		for i in collision_count:
@@ -77,6 +87,7 @@ func handleMovement():
 
 func handleState():
 	if state == GlobalEnums.CharacterState.HIT or state == GlobalEnums.CharacterState.DYING:
+		hit_area.monitoring = false
 		return
 	
 	if direction:
@@ -93,13 +104,10 @@ func _on_health_node_damaged(health: float, delta: float) -> void:
 		state = GlobalEnums.CharacterState.HIT
 	else:
 		state = GlobalEnums.CharacterState.DYING # Replace with function body.
-		print(collision_layer)
 		set_collision_layer_value(3, false)
-		set_collision_layer_value(9, true)
 		set_collision_mask_value(2, false)
 		set_collision_mask_value(3, false)
 		set_collision_mask_value(4, false)
-		print(collision_layer)
 		
 
 

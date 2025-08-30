@@ -1,7 +1,6 @@
 extends Node
+
 class_name HealthNode
-
-
 
 signal damaged(health: float, delta: float)
 signal changed(health: float, delta: float)
@@ -16,6 +15,13 @@ const MIN_DAMAGE: float = -2.0
 const  MAX_HEALTH: float = 100.0
 const MIN_HEALTH: float = 0.0
 
+@export var INVINSIBLE: bool = false:
+	get():
+		return INVINSIBLE
+		
+	set(value):
+		if value != INVINSIBLE:
+			INVINSIBLE = value
 @export_range(MIN_ARMOR, MAX_ARMOR, 1.0) var ARMOR: float = MIN_ARMOR:
 	get():
 		return ARMOR
@@ -52,7 +58,10 @@ func _ready() -> void:
 func _is_dead() -> bool:
 	return health <= MIN_HEALTH
 
+# Applies damage in float and returns health amount
 func hit(damage: float = -10) -> float:
+	if INVINSIBLE:
+		return health
 	var damageMultiplier: float = 1 - ARMOR / (MAX_ARMOR - MIN_ARMOR)
 	var damageAmount: float = clamp(damage * damageMultiplier, damage, MIN_DAMAGE)
 	health = health + damageAmount

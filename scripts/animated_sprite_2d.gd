@@ -4,13 +4,28 @@ extends AnimatedSprite2D
 @onready var sword : Area2D = $"../Sword"
 @onready var audio_stream_player: AudioStreamPlayer = $"../FootStepsPlayer"
 
+
+
 var animationStateMap = {
-	0: "Idle",
-	1: "Run",
-	2: "Jump",
-	3: "Stomp",
-	4: "Attack1"
+	GlobalEnums.CharacterState.IDLE: "Idle",
+	GlobalEnums.CharacterState.RUN: "Run",
+	GlobalEnums.CharacterState.JUMP: "Jump",
+	GlobalEnums.CharacterState.FALL: "Fall",
+	GlobalEnums.CharacterState.ATTACK1: "Attack1",
+	GlobalEnums.CharacterState.ATTACK2: "Attack2",
+	GlobalEnums.CharacterState.ATTACK3: "Attack1",
+	GlobalEnums.CharacterState.STOMP: "Stomp",
+	GlobalEnums.CharacterState.TUMBLE: "Tumble",
+	GlobalEnums.CharacterState.HIT: "Hit",
+	GlobalEnums.CharacterState.DYING: "Dying"
+	
 }
+
+var mustFinishBeforeChange: Array[String] = [
+	"Attack1",
+	"Attack2",
+	"Hit"
+]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self.animation = "Idle"
@@ -24,10 +39,7 @@ func _process(delta: float) -> void:
 
 func _on_character_body_2d_state_changed(state: int) -> void:
 	var animationName : String = animationStateMap[state]
-	if self.animation == "Attack1" or self.animation == "Attack2":
-		pass
-	else:
-		play(animationName)
+	play(animationStateMap[state])
 
 
 func _on_character_body_2d_direction_changed(direction: int) -> void:
@@ -38,35 +50,30 @@ func _on_character_body_2d_direction_changed(direction: int) -> void:
 	else:
 		pass # Replace with function body.
 		
-
-func _on_player_attack(attack_number: int) -> void:
-	var attackAnimationName : String
-	if attack_number == 0:
-		attackAnimationName = "Attack1"
-	elif attack_number == 1:
-		attackAnimationName = "Attack2"
-	else:
-		attackAnimationName = "Attack1"
-	play(attackAnimationName)
-	set_frame_and_progress(0,0)
-
-
-func _on_animation_finished() -> void:
-	if self.animation == "Attack1" or self.animation == "Attack2":
-		var pState = playerNode.state # Replace with function body.
-		var animationName : String = animationStateMap[pState]
-		play(animationName)
 	 
 func _is_attack() -> bool:
 	return self.animation == "Attack1" or self.animation == "Attack2"
 
+func _must_finish() -> bool:
+	for a in mustFinishBeforeChange:
+		if a == animation:
+			return true
+	return false
+	
+
+func is_animation_finished() -> bool:
+	var is_loop: bool = sprite_frames.get_animation_loop(animation)
+	var end_of_animation: bool = frame ==  sprite_frames.get_frame_count(animation) - 1
+	if is_loop:
+		return true
+	else:
+		if _must_finish():
+			return end_of_animation
+		else:
+			return true
+		
 
 func _on_frame_changed() -> void:
-	if _is_attack():
-		if frame == 0 or frame == 3:
-			sword.monitoring = false
-		else:
-			sword.monitoring = true
 	if animation == "Run":
 		if frame % 4 == 0:
 			audio_stream_player.play()

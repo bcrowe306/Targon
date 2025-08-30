@@ -16,4 +16,5 @@ func _on_player_state_changed(state: int) -> void:
 
 
 func _on_player_jump(jump_count: int) -> void:
-	pass
+	if jump_count == 1:
+		play()

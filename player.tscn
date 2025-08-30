@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://dt0ofdci4w48"]
+[gd_scene load_steps=108 format=3 uid="uid://dt0ofdci4w48"]
 
 [ext_resource type="Texture2D" uid="uid://b0ypyumppa2po" path="res://resources/Character/Attack-01/Attack-01-Sheet.png" id="1_hqtel"]
 [ext_resource type="Script" uid="uid://ch2uupd2tqbf4" path="res://player.gd" id="1_sweqy"]
@@ -7,14 +7,18 @@
 [ext_resource type="Texture2D" uid="uid://duhruwasvfo6m" path="res://resources/Character/Idle/Idle-Sheet.png" id="3_2hs0m"]
 [ext_resource type="Script" uid="uid://1bstu2g48eli" path="res://jump_sound_player.gd" id="3_606se"]
 [ext_resource type="Texture2D" uid="uid://cioqewdd7l4jy" path="res://resources/Character/Run/Run-Sheet.png" id="4_1jxqw"]
+[ext_resource type="Texture2D" uid="uid://cflcs7yl1kq2g" path="res://resources/Character/Dead/Dead-Sheet.png" id="5_ny14h"]
 [ext_resource type="Script" uid="uid://c3yhiacb06ywg" path="res://scripts/animated_sprite_2d.gd" id="6_2hs0m"]
 [ext_resource type="Script" uid="uid://dk0d3u8pqrrfy" path="res://fall_timer.gd" id="7_1jxqw"]
 [ext_resource type="Texture2D" uid="uid://yrx1t4tiagbr" path="res://resources/Character/Jump-All-Sheet.png" id="8_2wuci"]
 [ext_resource type="Script" uid="uid://dbxx0nfgaitoe" path="res://attack_timer.gd" id="8_dw050"]
 [ext_resource type="Script" uid="uid://ekdq4kx18wwk" path="res://sword.gd" id="9_b26j0"]
-[ext_resource type="PackedScene" uid="uid://3oax7jqdax58" path="res://scenes/health_node.tscn" id="10_n7ghd"]
+[ext_resource type="Texture2D" uid="uid://bw7sxegveg82u" path="res://resources/Character/Run/Tumble4.png" id="9_ek41f"]
+[ext_resource type="Script" uid="uid://c48jqf5rsxgv" path="res://health_node.gd" id="10_n7ghd"]
 [ext_resource type="AudioStream" uid="uid://cgwinnwevrkj" path="res://resources/sfx/Steps_carpet-008.ogg" id="11_ivps1"]
 [ext_resource type="Script" uid="uid://gsod8pbj04ar" path="res://audio_stream_player.gd" id="12_ivps1"]
+[ext_resource type="Script" uid="uid://cshq4355ofnx1" path="res://stomp_attack_area.gd" id="13_j5n4i"]
+[ext_resource type="Script" uid="uid://1avancdhjbc1" path="res://tumble_attack.gd" id="15_khis8"]
 [ext_resource type="AudioStream" uid="uid://d170vn6lvaq5e" path="res://resources/sfx/Swoosh Attack3.mp3" id="15_q13i1"]
 [ext_resource type="Script" uid="uid://crsohxxae0516" path="res://attack_1_player.gd" id="16_pylmc"]
 [ext_resource type="AudioStream" uid="uid://7c7g14ptflye" path="res://resources/sfx/Swoosh Attack4.mp3" id="17_pbfsw"]
@@ -28,6 +32,17 @@
 [ext_resource type="Script" uid="uid://c2hghgqvthre3" path="res://jump_1_player.gd" id="22_jm5j8"]
 [ext_resource type="AudioStream" uid="uid://c8tydkhsg80hk" path="res://resources/sfx/SFX- Vox-Female-01.wav" id="23_7hik5"]
 [ext_resource type="Script" uid="uid://bnncukakwvo43" path="res://jump_2_player.gd" id="24_jm5j8"]
+[ext_resource type="Script" uid="uid://dombk6lqhkq7q" path="res://state_label.gd" id="29_iruf7"]
+[ext_resource type="AudioStream" uid="uid://bfcq3lm5tq0hk" path="res://resources/sfx/whoosh/whoosh_short_08.wav" id="31_efrwb"]
+[ext_resource type="Script" uid="uid://buvk27j73rl78" path="res://stomp_whoosh_audio_stream.gd" id="32_hiqhm"]
+[ext_resource type="Script" uid="uid://df614eoekkbes" path="res://dash_timer.gd" id="33_hiqhm"]
+[ext_resource type="AudioStream" uid="uid://criylsjtsm2bk" path="res://resources/sfx/whoosh/whoosh_shortest_06.wav" id="34_hl5qd"]
+[ext_resource type="Script" uid="uid://bwjygbvqw31gh" path="res://dash_audio_stream.gd" id="34_tkwlq"]
+[ext_resource type="AudioStream" uid="uid://cb5ucfsx8qihx" path="res://resources/sfx/SFX-Rolling Plastic.wav" id="38_pgbbb"]
+[ext_resource type="Script" uid="uid://cv2cabxmnvi6g" path="res://tumble_audio_stream.gd" id="39_331ug"]
+[ext_resource type="Script" uid="uid://b0r6a5py7gy5g" path="res://tumble_particles.gd" id="40_331ug"]
+[ext_resource type="AudioStream" uid="uid://dv1xn6qk4imor" path="res://resources/sfx/SFX- Vox-Female-11.wav" id="42_3iwfv"]
+[ext_resource type="Script" uid="uid://dey3hrc3giu7j" path="res://damage_player.gd" id="43_qwsg1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dw050"]
 height = 48.0
@@ -64,6 +79,38 @@ region = Rect2(576, 0, 96, 80)
 atlas = ExtResource("1_hqtel")
 region = Rect2(672, 0, 96, 80)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfmca"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(0, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_76oay"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(80, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4uyv"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(160, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw8ou"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(240, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ygbnx"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(320, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2t6f"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(400, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3lcn"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(480, 0, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xry5e"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(560, 0, 80, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_op7ga"]
 atlas = ExtResource("2_sweqy")
 region = Rect2(448, 0, 64, 64)
@@ -95,6 +142,10 @@ region = Rect2(832, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dx0e4"]
 atlas = ExtResource("2_sweqy")
 region = Rect2(896, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h6w8y"]
+atlas = ExtResource("5_ny14h")
+region = Rect2(0, 0, 80, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jm5j8"]
 atlas = ExtResource("3_2hs0m")
@@ -196,6 +247,22 @@ region = Rect2(704, 0, 64, 64)
 atlas = ExtResource("8_2wuci")
 region = Rect2(768, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_fddr8"]
+atlas = ExtResource("9_ek41f")
+region = Rect2(0, 0, 64, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oybyf"]
+atlas = ExtResource("9_ek41f")
+region = Rect2(64, 0, 64, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ajfva"]
+atlas = ExtResource("9_ek41f")
+region = Rect2(128, 0, 64, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ef02"]
+atlas = ExtResource("9_ek41f")
+region = Rect2(192, 0, 64, 80)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_qwsg1"]
 animations = [{
 "frames": [{
@@ -234,6 +301,35 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_pfmca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_76oay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b4uyv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tw8ou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ygbnx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2t6f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l3lcn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xry5e")
+}],
+"loop": true,
+"name": &"Dying",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_op7ga")
 }, {
 "duration": 1.0,
@@ -260,6 +356,23 @@ animations = [{
 "loop": false,
 "name": &"Fall",
 "speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h6w8y")
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h6w8y")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"Hit",
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -355,12 +468,47 @@ animations = [{
 "loop": false,
 "name": &"Stomp",
 "speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fddr8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oybyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ajfva")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ef02")
+}],
+"loop": true,
+"name": &"Tumble",
+"speed": 11.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qtqh7"]
-size = Vector2(22.5, 63)
+size = Vector2(24.5, 63)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2wuci"]
+size = Vector2(17, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iruf7"]
+size = Vector2(32, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pfmca"]
+radius = 27.074
 
 [sub_resource type="Gradient" id="Gradient_5tmop"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_j5n4i"]
+
+[sub_resource type="Curve" id="Curve_ny14h"]
+_data = [Vector2(0.0616883, 1), 0.0, 0.0, 0, 0, Vector2(0.987013, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ibah8"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Player" type="CharacterBody2D"]
@@ -379,8 +527,8 @@ shape = SubResource("CapsuleShape2D_dw050")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_qwsg1")
-animation = &"Stomp"
-frame = 5
+animation = &"Hit"
+frame = 3
 frame_progress = 1.0
 script = ExtResource("6_2hs0m")
 
@@ -395,17 +543,39 @@ one_shot = true
 script = ExtResource("8_dw050")
 
 [node name="Sword" type="Area2D" parent="."]
-collision_layer = 14
-collision_mask = 14
+collision_layer = 0
+collision_mask = 12
 script = ExtResource("9_b26j0")
 push_force = 1500.0
 
 [node name="swordCollisionShape" type="CollisionShape2D" parent="Sword"]
-position = Vector2(28.75, -7.5)
+position = Vector2(29.75, -7.5)
 shape = SubResource("RectangleShape2D_qtqh7")
 debug_color = Color(0.996448, 0, 0.1196, 0.486275)
 
-[node name="HealthNode" parent="." instance=ExtResource("10_n7ghd")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
+position = Vector2(8.5, -32.5)
+shape = SubResource("RectangleShape2D_2wuci")
+
+[node name="StompAttackArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 12
+script = ExtResource("13_j5n4i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StompAttackArea"]
+position = Vector2(1, 35)
+shape = SubResource("RectangleShape2D_iruf7")
+
+[node name="TumbleAttack" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("15_khis8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TumbleAttack"]
+shape = SubResource("CircleShape2D_pfmca")
+
+[node name="HealthNode" type="Node" parent="."]
+script = ExtResource("10_n7ghd")
 
 [node name="FootStepsPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_ivps1")
@@ -424,7 +594,7 @@ script = ExtResource("18_5tmop")
 
 [node name="AttackGrunts" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("19_qtqh7")
-volume_db = -30.288
+volume_db = -26.763
 script = ExtResource("20_2wuci")
 
 [node name="Attack3Player" type="AudioStreamPlayer" parent="."]
@@ -434,12 +604,12 @@ script = ExtResource("20_5tmop")
 
 [node name="Jump1Player" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("21_dx0e4")
-volume_db = -25.0
+volume_db = -32.638
 script = ExtResource("22_jm5j8")
 
 [node name="Jump2Player" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("23_7hik5")
-volume_db = -25.0
+volume_db = -17.362
 script = ExtResource("24_jm5j8")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
@@ -459,24 +629,105 @@ scale_amount_max = 2.0
 color_ramp = SubResource("Gradient_5tmop")
 script = ExtResource("21_5tmop")
 
+[node name="StateLabel" type="Label" parent="."]
+offset_left = -15.0
+offset_top = -59.0
+offset_right = 25.0
+offset_bottom = -36.0
+text = "Test"
+label_settings = SubResource("LabelSettings_j5n4i")
+script = ExtResource("29_iruf7")
+
+[node name="StompWhooshAudioStream" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("31_efrwb")
+volume_db = -22.328
+pitch_scale = 0.87
+script = ExtResource("32_hiqhm")
+
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+script = ExtResource("33_hiqhm")
+
+[node name="DashAudioStream" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("34_hl5qd")
+volume_db = -15.172
+script = ExtResource("34_tkwlq")
+
+[node name="TumbleTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="TumbleAudioStream" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("38_pgbbb")
+pitch_scale = 0.42
+script = ExtResource("39_331ug")
+
+[node name="TumbleParticles" type="CPUParticles2D" parent="."]
+position = Vector2(0, 26)
+emitting = false
+amount = 50
+lifetime = 0.25
+direction = Vector2(1, -0.6)
+spread = 28.04
+initial_velocity_min = 206.06
+initial_velocity_max = 369.7
+scale_amount_min = 0.0
+scale_amount_max = 7.06
+scale_amount_curve = SubResource("Curve_ny14h")
+color_ramp = SubResource("Gradient_ibah8")
+script = ExtResource("40_331ug")
+
+[node name="DamagedTimer" type="Timer" parent="."]
+
+[node name="DamagePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("42_3iwfv")
+volume_db = -21.153
+pitch_scale = 0.86
+autoplay = true
+script = ExtResource("43_qwsg1")
+
 [connection signal="attack" from="." to="AnimatedSprite2D" method="_on_player_attack"]
 [connection signal="attack" from="." to="AttackTimer" method="_on_player_attack"]
+[connection signal="attack" from="." to="Sword" method="_on_player_attack"]
 [connection signal="attack" from="." to="Attack1Player" method="_on_player_attack"]
 [connection signal="attack" from="." to="Attack2Player" method="_on_player_attack"]
-[connection signal="attack" from="." to="Attack3Player" method="_on_player_attack"]
 [connection signal="attack" from="." to="AttackGrunts" method="_on_player_attack"]
+[connection signal="attack" from="." to="Attack3Player" method="_on_player_attack"]
 [connection signal="direction_changed" from="." to="AnimatedSprite2D" method="_on_character_body_2d_direction_changed"]
 [connection signal="direction_changed" from="." to="Sword" method="_on_player_direction_changed"]
+[connection signal="direction_changed" from="." to="TumbleParticles" method="_on_player_direction_changed"]
 [connection signal="jump" from="." to="JumpSoundPlayer" method="_on_player_jump"]
-[connection signal="jump" from="." to="Jump2Player" method="_on_player_jump"]
 [connection signal="jump" from="." to="Jump1Player" method="_on_player_jump"]
+[connection signal="jump" from="." to="Jump2Player" method="_on_player_jump"]
 [connection signal="state_changed" from="." to="AnimatedSprite2D" method="_on_character_body_2d_state_changed"]
 [connection signal="state_changed" from="." to="FallTimer" method="_on_character_body_2d_state_changed"]
+[connection signal="state_changed" from="." to="StompAttackArea" method="_on_player_state_changed"]
+[connection signal="state_changed" from="." to="TumbleAttack" method="_on_player_state_changed"]
 [connection signal="state_changed" from="." to="FootStepsPlayer" method="_on_player_state_changed"]
-[connection signal="animation_finished" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_animation_finished"]
+[connection signal="state_changed" from="." to="StateLabel" method="_on_player_state_changed"]
+[connection signal="state_changed" from="." to="StompWhooshAudioStream" method="_on_player_state_changed"]
+[connection signal="state_changed" from="." to="TumbleAudioStream" method="_on_player_state_changed"]
+[connection signal="state_changed" from="." to="TumbleParticles" method="_on_player_state_changed"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="AnimatedSprite2D" method="_on_frame_changed"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="CPUParticles2D" method="_on_animated_sprite_2d_frame_changed"]
 [connection signal="timeout" from="FallTimer" to="FallTimer" method="_on_timeout"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="AttackTimer" to="AttackTimer" method="_on_timeout"]
 [connection signal="body_entered" from="Sword" to="Sword" method="_on_body_entered"]
+[connection signal="body_entered" from="StompAttackArea" to="StompAttackArea" method="_on_body_entered"]
+[connection signal="stomp" from="StompAttackArea" to="." method="_on_stomp_attack_area_stomp"]
+[connection signal="body_entered" from="TumbleAttack" to="TumbleAttack" method="_on_body_entered"]
+[connection signal="ready" from="TumbleAttack" to="TumbleAttack" method="_on_ready"]
+[connection signal="tumbled" from="TumbleAttack" to="." method="_on_tumble_attack_tumbled"]
+[connection signal="armor_changed" from="HealthNode" to="." method="_on_health_node_armor_changed"]
+[connection signal="changed" from="HealthNode" to="." method="_on_health_node_changed"]
+[connection signal="changed" from="HealthNode" to="StateLabel" method="_on_health_node_changed"]
+[connection signal="damaged" from="HealthNode" to="." method="_on_health_node_damaged"]
+[connection signal="damaged" from="HealthNode" to="DamagePlayer" method="_on_health_node_damaged"]
+[connection signal="died" from="HealthNode" to="." method="_on_health_node_died"]
+[connection signal="healed" from="HealthNode" to="." method="_on_health_node_healed"]
+[connection signal="dash" from="DashTimer" to="." method="_on_dash_timer_dash"]
+[connection signal="dash" from="DashTimer" to="DashAudioStream" method="_on_dash_timer_dash"]
+[connection signal="timeout" from="TumbleTimer" to="." method="_on_tumble_timer_timeout"]
+[connection signal="timeout" from="DamagedTimer" to="." method="_on_damaged_timer_timeout"]

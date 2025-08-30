@@ -1,10 +1,11 @@
-[gd_scene load_steps=35 format=3 uid="uid://8oy0m7wdy233"]
+[gd_scene load_steps=37 format=3 uid="uid://8oy0m7wdy233"]
 
 [ext_resource type="Script" uid="uid://cyoqvodsqigi2" path="res://character_body_2d.gd" id="1_rf5ds"]
-[ext_resource type="PackedScene" uid="uid://3oax7jqdax58" path="res://scenes/health_node.tscn" id="2_x8jb1"]
+[ext_resource type="Script" uid="uid://c48jqf5rsxgv" path="res://health_node.gd" id="2_or4cs"]
 [ext_resource type="Script" uid="uid://dwosn21kas5pu" path="res://scenes/collision_shape_2d.gd" id="3_5v2kl"]
 [ext_resource type="Texture2D" uid="uid://dvlnb7qf52qev" path="res://resources/Mob/Boar/Hit-Vanish/Hit-Sheet-White.png" id="3_ac81c"]
 [ext_resource type="Texture2D" uid="uid://bjws8l8sbrtjs" path="res://resources/Mob/Boar/Idle/Idle-Sheet-White.png" id="4_a11d6"]
+[ext_resource type="Script" uid="uid://gg04o0dorxwv" path="res://scenes/area_2d.gd" id="4_or4cs"]
 [ext_resource type="Texture2D" uid="uid://dv2iantwejr81" path="res://resources/Mob/Boar/Run/Run-Sheet-White.png" id="5_p086k"]
 [ext_resource type="Texture2D" uid="uid://oq8b2u88pjkc" path="res://resources/Mob/Boar/Walk/Walk-Base-Sheet-White.png" id="6_komsd"]
 [ext_resource type="Script" uid="uid://dkfggrlviy32s" path="res://animated_sprite_2d.gd" id="7_76vtk"]
@@ -13,8 +14,12 @@
 [ext_resource type="Script" uid="uid://ort170jhcl8u" path="res://scenes/hit_thump_player.gd" id="10_mgh5l"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q3txi"]
-radius = 17.0
-height = 50.0
+radius = 20.0
+height = 62.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_or4cs"]
+radius = 23.0
+height = 72.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qwk0"]
 atlas = ExtResource("3_ac81c")
@@ -204,21 +209,34 @@ collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_rf5ds")
 SPEED = 60.0
+DAMAGE = 26.0
 
-[node name="HealthNode" parent="." instance=ExtResource("2_x8jb1")]
-health = 33.0
+[node name="HealthNode" type="Node" parent="."]
+script = ExtResource("2_or4cs")
+health = 60.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 5)
+visible = false
+position = Vector2(0, 3)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_q3txi")
 script = ExtResource("3_5v2kl")
+
+[node name="HitArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("4_or4cs")
+
+[node name="HitShape" type="CollisionShape2D" parent="HitArea"]
+position = Vector2(0, 1)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_or4cs")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(1.42, 1.42)
 sprite_frames = SubResource("SpriteFrames_w3110")
 animation = &"Walk"
-frame_progress = 0.765177
+frame = 2
 script = ExtResource("7_76vtk")
 
 [node name="WhiteBoarHitParticles" type="CPUParticles2D" parent="."]
@@ -253,7 +271,8 @@ script = ExtResource("10_mgh5l")
 [connection signal="state_changed" from="." to="AnimatedSprite2D" method="_on_character_body_2d_state_changed"]
 [connection signal="damaged" from="HealthNode" to="." method="_on_health_node_damaged"]
 [connection signal="damaged" from="HealthNode" to="AnimatedSprite2D" method="_on_health_node_damaged"]
+[connection signal="damaged" from="HealthNode" to="WhiteBoarHitParticles" method="_on_health_node_damaged"]
 [connection signal="damaged" from="HealthNode" to="HitSoundsPlayer" method="_on_health_node_damaged"]
 [connection signal="damaged" from="HealthNode" to="HitThumpPlayer" method="_on_health_node_damaged"]
-[connection signal="damaged" from="HealthNode" to="WhiteBoarHitParticles" method="_on_health_node_damaged"]
+[connection signal="body_entered" from="HitArea" to="HitArea" method="_on_body_entered"]
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

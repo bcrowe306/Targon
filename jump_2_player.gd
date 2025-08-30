@@ -13,5 +13,4 @@ func _process(delta: float) -> void:
 
 func _on_player_jump(jump_count: int) -> void:
 	if jump_count == 2:
-		print(jump_count)
 		play() # Replace with function body.
