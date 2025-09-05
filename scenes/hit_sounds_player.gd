@@ -12,5 +12,5 @@ func play_dying_sound():
 	stream = HIT_SOUND_009
 	play()
 	
-func _on_health_node_damaged(health: float, delta: float) -> void:
+func _on_health_node_damaged(_health: float, _delta: float) -> void:
 	play_damaged_sound() 

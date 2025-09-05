@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bx18ilrofmow0"
+path="res://.godot/imported/Jazmin J-Hurt3.wav-e652c000ee6e6841bfde79b66b0115aa.sample"
+
+[deps]
+
+source_file="res://resources/sfx/Jazmin J-Hurt3.wav"
+dest_files=["res://.godot/imported/Jazmin J-Hurt3.wav-e652c000ee6e6841bfde79b66b0115aa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

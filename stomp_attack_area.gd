@@ -10,7 +10,7 @@ func _ready() -> void:
 	monitoring = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_body_entered(body: Node2D) -> void:
@@ -19,11 +19,5 @@ func _on_body_entered(body: Node2D) -> void:
 			if child.health > 0:
 				var enemy_health_after = child.hit(-STOMP_ATTACK_DAMAGE)
 				stomp.emit(enemy_health_after <= 0)
-
-
-func _on_player_state_changed(state: int) -> void:
-	if state == GlobalEnums.CharacterState.STOMP:
-		monitoring = true
-		
-	else:
-		monitoring = false
+				#player.state_machine.state = "Jump2"
+				player.do_jump()

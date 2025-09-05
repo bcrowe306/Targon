@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://b6gq38h5dgivg"]
+
+[ext_resource type="Script" uid="uid://bn7uceismaycp" path="res://scenes/interactable.gd" id="1_0iwdk"]
+[ext_resource type="Texture2D" uid="uid://cv7no7xvk65u2" path="res://resources/Assets/Interior-01.png" id="1_c6f01"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0iwdk"]
+atlas = ExtResource("1_c6f01")
+region = Rect2(127.985, 143.908, 48.0515, 48.0901)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c6f01"]
+size = Vector2(48, 48)
+
+[node name="Interactable" type="RigidBody2D"]
+script = ExtResource("1_0iwdk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_0iwdk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_c6f01")

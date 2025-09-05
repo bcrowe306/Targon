@@ -6,10 +6,6 @@ extends AnimatedSprite2D
 func _ready() -> void:
 	set_and_play_animation("Idle") # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 
 func _on_character_body_2d_state_changed(state: int) -> void:
 	var d :float = character_body_2d.direction
@@ -23,8 +19,8 @@ func _on_character_body_2d_state_changed(state: int) -> void:
 	if state == GlobalEnums.CharacterState.DYING:
 		return set_and_play_animation("Dying")
 
-func set_and_play_animation(name: String):
-	self.animation = name
+func set_and_play_animation(animation_name: String):
+	self.animation = animation_name
 	play()
 	return
 

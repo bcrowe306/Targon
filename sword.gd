@@ -1,8 +1,8 @@
 extends Area2D
 
 @onready var swordHitbox := $swordCollisionShape
-@onready var playerNode := $".."
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var playerNode: CharacterBody2D = $".."
 
 @export var attack_1_damage: float = -34.0
 @export var attack_2_damage: float = -48.0
@@ -14,10 +14,17 @@ func _ready() -> void:
 	monitoring = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _process(_delta: float) -> void:
+	var direction = playerNode.direction
+	if direction > 0:
+		swordHitbox.position.x = 25
+		collision_shape_2d.position.x = 9
+		
+	elif direction < 0:
+		swordHitbox.position.x = -25
+		collision_shape_2d.position.x = -9
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_body_entered(_body: Node2D) -> void:
 	pass
 	#var force = -(push_force + (playerNode.attack_number * 1000))
 	#if playerNode.facing_direction:
@@ -35,14 +42,8 @@ func _on_body_entered(body: Node2D) -> void:
 				#elif  playerNode.attack_number == 2:
 					#child.hit(attack_3_damage)
 
-func _on_player_direction_changed(direction: int) -> void:
-	if direction > 0:
-		swordHitbox.position.x = 28
-		collision_shape_2d.position.x = 8.5
-		
-	elif direction < 0:
-		swordHitbox.position.x = -28
-		collision_shape_2d.position.x = -8.5
+func _on_player_direction_changed(_direction: int) -> void:
+	pass
 
 
 func _on_player_attack(attack_number: int) -> void:

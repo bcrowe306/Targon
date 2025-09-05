@@ -60,24 +60,41 @@ func _is_dead() -> bool:
 
 # Applies damage in float and returns health amount
 func hit(damage: float = -10) -> float:
-	if INVINSIBLE:
+	if INVINSIBLE or damage >=0:
 		return health
 	var damageMultiplier: float = 1 - ARMOR / (MAX_ARMOR - MIN_ARMOR)
 	var damageAmount: float = clamp(damage * damageMultiplier, damage, MIN_DAMAGE)
 	health = health + damageAmount
+	reduceArmor()
 	return health
+	
+func kill(bypass_invinsibility: bool = true) -> int:
+	if bypass_invinsibility:
+		health = 0
+		ARMOR = 0
+	else:
+		if not INVINSIBLE:
+			health = 0
+			ARMOR = 0
+	return health
+	
 	
 func heal(amount: float = 10) -> float:
 	health = health + amount
 	return health
 
+func reset():
+	INVINSIBLE = false
+	health = MAX_HEALTH
+	ARMOR = MIN_ARMOR
+
 func reduceArmor() -> float:
-	ARMOR = ARMOR - 2.0
+	ARMOR = ARMOR - 5.0
 	return ARMOR
 
 func increaseArmor(amount: float) -> float:
 	ARMOR = ARMOR + amount
 	return ARMOR
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass

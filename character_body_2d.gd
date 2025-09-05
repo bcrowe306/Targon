@@ -60,15 +60,8 @@ func handleMovement():
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-	if move_and_slide():
-		for i in get_slide_collision_count():
-			var c := get_slide_collision(i)
-			var collider = c.get_collider()
-			if collider.name == "Player":
-				for child in collider.get_children():
-					#print(child.name)
-					pass
-	
+		
+	move_and_slide()
 	if is_on_wall():
 		var collision_count = get_slide_collision_count()
 		for i in collision_count:
@@ -99,7 +92,7 @@ func _on_ready() -> void:
 	pass
 
 
-func _on_health_node_damaged(health: float, delta: float) -> void:
+func _on_health_node_damaged(health: float, _delta: float) -> void:
 	if health > 0:
 		state = GlobalEnums.CharacterState.HIT
 	else:

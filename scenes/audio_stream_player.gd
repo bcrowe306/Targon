@@ -6,11 +6,8 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
-func _on_health_node_damaged(health: float, delta: float) -> void:
+func _on_health_node_damaged(health: float, _delta: float) -> void:
 	if health == 0:
 		stream =DESIGNED_PICKAXE_3
 	else:

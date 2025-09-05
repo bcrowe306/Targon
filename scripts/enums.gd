@@ -4,7 +4,7 @@ enum CharacterState {
 	IDLE, RUN, JUMP, FALL, 
 	ATTACK1, ATTACK2, ATTACK3, ATTACK4, 
 	USE, WALK, CROUCH, TUMBLE, DASH, CLIMB, HANG, PUSH, PICKUP, PUTDOWN, CARRY, LAYING, 
-	HIT, HEALING, DYING, DEAD, SPAWN, RESPAWN, STOMP
+	HIT, HEALING, DYING, DEAD, SPAWN, RESPAWN, STOMP, READY
 	}
 
 var characterStateStrings: Array[String] = [
@@ -34,7 +34,8 @@ var characterStateStrings: Array[String] = [
 	"DEAD", 
 	"SPAWN", 
 	"RESPAWN", 
-	"STOMP"
+	"STOMP",
+	"READY"
 ]
 
 func getCharacterStateString(state: CharacterState):

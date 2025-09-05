@@ -2,7 +2,7 @@
 
 [sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_j3pel"]
 resource_name = "HighPassFilter"
-cutoff_hz = 958.0
+cutoff_hz = 611.0
 
 [resource]
 bus/1/name = &"Attacks"

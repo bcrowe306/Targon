@@ -4,6 +4,7 @@ extends AnimatedSprite2D
 @onready var sword : Area2D = $"../Sword"
 @onready var audio_stream_player: AudioStreamPlayer = $"../FootStepsPlayer"
 
+var run_fps: float = 20.0
 
 
 var animationStateMap = {
@@ -17,9 +18,11 @@ var animationStateMap = {
 	GlobalEnums.CharacterState.STOMP: "Stomp",
 	GlobalEnums.CharacterState.TUMBLE: "Tumble",
 	GlobalEnums.CharacterState.HIT: "Hit",
-	GlobalEnums.CharacterState.DYING: "Dying"
-	
+	GlobalEnums.CharacterState.DYING: "Dying",
+	GlobalEnums.CharacterState.RESPAWN: "Respawn",
+	GlobalEnums.CharacterState.READY: "Idle",
 }
+
 
 var mustFinishBeforeChange: Array[String] = [
 	"Attack1",
@@ -34,7 +37,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	var fps = playerNode.getVelocityPercentage() * run_fps
+	sprite_frames.set_animation_speed("Run", fps) 
 
 
 func _on_character_body_2d_state_changed(state: int) -> void:
@@ -51,8 +55,8 @@ func _on_character_body_2d_direction_changed(direction: int) -> void:
 		pass # Replace with function body.
 		
 	 
-func _is_attack() -> bool:
-	return self.animation == "Attack1" or self.animation == "Attack2"
+func _is_attack(animation_name: String) -> bool:
+	return animation_name == "Attack1" or animation_name == "Attack2" or animation_name == "Attack3"
 
 func _must_finish() -> bool:
 	for a in mustFinishBeforeChange:
@@ -61,14 +65,21 @@ func _must_finish() -> bool:
 	return false
 	
 
-func is_animation_finished() -> bool:
+func is_animation_finished(next_state: int) -> bool:
+	var next_animation: String = animationStateMap[next_state]
 	var is_loop: bool = sprite_frames.get_animation_loop(animation)
 	var end_of_animation: bool = frame ==  sprite_frames.get_frame_count(animation) - 1
+	
+	if next_animation == "Dying" or next_animation == "Respawn":
+		return true
 	if is_loop:
 		return true
 	else:
 		if _must_finish():
-			return end_of_animation
+			if _is_attack(animation) and _is_attack(next_animation):
+				return true 
+			else:
+				return end_of_animation
 		else:
 			return true
 		

@@ -1,0 +1,137 @@
+[gd_scene load_steps=12 format=3 uid="uid://64ytekh0x2qc"]
+
+[ext_resource type="Texture2D" uid="uid://sh2jbewp38sd" path="res://resources/Assets/Tiles.png" id="1_h5dih"]
+[ext_resource type="Script" uid="uid://b0wsqqyhci1bu" path="res://coin.gd" id="1_ufda5"]
+[ext_resource type="AudioStream" uid="uid://2kohmu7fgbc4" path="res://resources/sfx/CoinBell.wav" id="3_fj540"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ou7jl"]
+radius = 6.0
+height = 24.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufda5"]
+atlas = ExtResource("1_h5dih")
+region = Rect2(244.99, 338.965, 6.48311, 9.21341)
+
+[sub_resource type="Animation" id="Animation_ufda5"]
+resource_name = "Collected"
+
+[sub_resource type="Animation" id="Animation_ou7jl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CoinSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.957086, 1.10913)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CoinSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_h5dih"]
+resource_name = "Spin"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CoinSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.5),
+"transitions": PackedFloat32Array(1.7411, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(-2, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CoinSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333, 0.333333, 0.5, 0.766667),
+"transitions": PackedFloat32Array(0.31864, 1.86607, 0.392292, 1.46409),
+"update": 0,
+"values": [Vector2(0, 2.3), Vector2(0, -2.3), Vector2(0, 2.3), Vector2(0, -2.3)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ufda5"]
+_data = {
+&"Collected": SubResource("Animation_ufda5"),
+&"RESET": SubResource("Animation_ou7jl"),
+&"Spin": SubResource("Animation_h5dih")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5dih"]
+atlas = ExtResource("1_h5dih")
+region = Rect2(244.815, 338.617, 6.67215, 9.92044)
+
+[sub_resource type="Gradient" id="Gradient_h5dih"]
+offsets = PackedFloat32Array(0, 0.666667)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="Coin" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_ufda5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ou7jl")
+
+[node name="CoinSprite" type="Sprite2D" parent="."]
+rotation = -3.14159
+scale = Vector2(0.957086, 1.10913)
+texture = SubResource("AtlasTexture_ufda5")
+
+[node name="CoinAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ufda5")
+}
+autoplay = "Spin"
+speed_scale = 0.678
+
+[node name="CoinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_fj540")
+volume_db = -17.637
+
+[node name="CoinTimer" type="Timer" parent="."]
+wait_time = 0.75
+one_shot = true
+
+[node name="CoinParticles" type="CPUParticles2D" parent="."]
+emitting = false
+texture = SubResource("AtlasTexture_h5dih")
+lifetime = 0.45
+one_shot = true
+explosiveness = 0.64
+emission_shape = 1
+emission_sphere_radius = 1.93
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 20)
+initial_velocity_min = 103.3
+initial_velocity_max = 103.3
+linear_accel_min = -74.45
+linear_accel_max = -74.45
+angle_max = 42.0
+scale_amount_min = 0.5
+scale_amount_max = 0.7
+color = Color(0.95, 0.95, 0.95, 1)
+color_ramp = SubResource("Gradient_h5dih")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="CoinTimer" to="." method="_on_coin_timer_timeout"]

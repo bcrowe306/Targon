@@ -24,6 +24,10 @@ Sounds="*res://scripts/sounds.gd"
 
 window/stretch/mode="canvas_items"
 
+[global_group]
+
+Pushable=""
+
 [input]
 
 DIR_LEFT={

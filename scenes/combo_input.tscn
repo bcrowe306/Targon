@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://vihk6kbv3p5s"]
+
+[ext_resource type="Script" uid="uid://ds26sxsw7ep6e" path="res://combo_input.gd" id="1_11fom"]
+
+[node name="ComboInput" type="Node2D"]
+script = ExtResource("1_11fom")
+combo_seconds = 0.4
+actions = Array[String](["DIR_LEFT", "DIR_RIGHT", "DIR_RIGHT"])
+
+[node name="ComboTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="timeout" from="ComboTimer" to="." method="_on_timer_timeout"]

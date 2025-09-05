@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dcntqcgce5opb"]
+[gd_scene load_steps=16 format=3 uid="uid://dcntqcgce5opb"]
 
 [ext_resource type="Script" uid="uid://8xl63lictxk6" path="res://rigid_body_2d.gd" id="1_cupic"]
 [ext_resource type="Texture2D" uid="uid://bvqdajunf2c16" path="res://resources/Assets/Props-Rocks.png" id="2_7fogc"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://c7aciah5nio5m" path="res://scenes/damaged_particles.gd" id="3_mm1s3"]
 [ext_resource type="Script" uid="uid://dhwmh5a773k3g" path="res://cpu_particles_2d.gd" id="4_mm1s3"]
 [ext_resource type="Script" uid="uid://c8dpqtny3d3xw" path="res://scenes/audio_stream_player.gd" id="5_7fogc"]
+[ext_resource type="AudioStream" uid="uid://cb5ucfsx8qihx" path="res://resources/sfx/SFX-Rolling Plastic.wav" id="7_pjgr7"]
+[ext_resource type="Script" uid="uid://qhqj1x2l7kb" path="res://scenes/boulder_moved.gd" id="8_dbxf8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pjgr7"]
 atlas = ExtResource("2_7fogc")
@@ -32,7 +34,7 @@ radius = 13.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_dbxf8"]
 radius = 11.0
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="RigidBody2D" type="RigidBody2D" groups=["Pushable"]]
 collision_layer = 8
 collision_mask = 15
 mass = 9.724
@@ -116,8 +118,15 @@ shape = SubResource("CircleShape2D_pjgr7")
 position = Vector2(6, -3)
 shape = SubResource("CircleShape2D_dbxf8")
 
+[node name="BoulderMoved" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_pjgr7")
+volume_db = -12.749
+script = ExtResource("8_dbxf8")
+
+[connection signal="movement" from="." to="BoulderMoved" method="_on_rigid_body_2d_movement"]
 [connection signal="damaged" from="HealthNode" to="DamagedParticles" method="_on_health_node_damaged"]
 [connection signal="damaged" from="HealthNode" to="BoulderHitPlayer" method="_on_health_node_damaged"]
 [connection signal="died" from="HealthNode" to="." method="_on_health_node_died"]
 [connection signal="died" from="HealthNode" to="BrokenParticles" method="_on_health_node_died"]
 [connection signal="finished" from="BrokenParticles" to="." method="_on_cpu_particles_2d_finished"]
+[connection signal="finished" from="BoulderMoved" to="BoulderMoved" method="_on_finished"]

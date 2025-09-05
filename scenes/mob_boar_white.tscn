@@ -14,12 +14,12 @@
 [ext_resource type="Script" uid="uid://ort170jhcl8u" path="res://scenes/hit_thump_player.gd" id="10_mgh5l"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q3txi"]
-radius = 20.0
-height = 62.0
+radius = 17.0
+height = 60.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_or4cs"]
-radius = 23.0
-height = 72.0
+radius = 18.0
+height = 62.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6qwk0"]
 atlas = ExtResource("3_ac81c")
@@ -207,6 +207,7 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
 [node name="MobBoarWhite" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 11
+platform_floor_layers = 4278190081
 script = ExtResource("1_rf5ds")
 SPEED = 60.0
 DAMAGE = 26.0
@@ -216,8 +217,7 @@ script = ExtResource("2_or4cs")
 health = 60.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 3)
+position = Vector2(0, 5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_q3txi")
 script = ExtResource("3_5v2kl")
@@ -228,7 +228,7 @@ collision_mask = 2
 script = ExtResource("4_or4cs")
 
 [node name="HitShape" type="CollisionShape2D" parent="HitArea"]
-position = Vector2(0, 1)
+position = Vector2(0, 5)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_or4cs")
 

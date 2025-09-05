@@ -4,13 +4,31 @@ extends RigidBody2D
 @onready var collision_polygon_2d: CollisionPolygon2D = $CollisionPolygon2D
 @onready var sprite_2d: Sprite2D = $Sprite2D
 
+signal movement(is_moved: bool)
+
+var pos: Vector2
+var rot: float
+var moved: bool = false:
+	get():
+		return moved
+	set(value):
+		if value != moved:
+			moved = value
+			movement.emit(value)
+
 func _ready() -> void:
-	pass # Replace with function body.
+	pos = position # Replace with function body.
+	rot = rotation
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _process(_delta: float) -> void:
+	if position != pos or rotation != rot:
+		moved = true
+	else:
+		moved = false
+	pos = position
+	rot = rotation
 
 
 func _on_cpu_particles_2d_finished() -> void:

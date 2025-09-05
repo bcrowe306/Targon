@@ -7,9 +7,9 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
-func _on_health_node_damaged(health: float, delta: float) -> void:
+func _on_health_node_damaged(_health: float, _delta: float) -> void:
 	restart() # Replace with function body.

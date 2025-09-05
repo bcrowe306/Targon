@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 class_name Player
-# Signals
 
+# Signals
 signal attack(attack_number: int)
 signal state_changed(state: GlobalEnums.CharacterState)
 signal direction_changed(direction: int)
@@ -12,8 +12,10 @@ signal healed(health: float, delta: float)
 signal health_changed(health: float, delta: float)
 signal armor_changed(armor: float)
 signal died(health: float)
+signal coins(amount: int)
+signal diamonds(amount: int)
 
-@export var ACCELERATION: float = 1500
+@export var ACCELERATION: float = 1400
 @export var SPEED: float = 300.0
 @export var SPEED_BOOST: float = 1.0
 @export var JUMP_VELOCITY: float = -400.0
@@ -23,6 +25,8 @@ signal died(health: float)
 @export var ATTACK_COMBO_JUMP = -300
 @export var PUSH_FORCE: float = 15.0
 @export var TUMBLE_BOUNCE_BACK = 2000
+@export var LATERAL_DASH_VELOCITY = 4000.0
+@export var ACCEPT_INPUT: bool = true
 
 var jump_count: int = 0
 var attack_number: int = 0
@@ -36,15 +40,22 @@ var facing_direction: bool = true: # True means we're facing right, flase is lef
 		if value != facing_direction:
 			facing_direction = value
 var attack_count: int = 0
+
 @onready var AS2d = $AnimatedSprite2D
 @onready var fallTimerNode = $FallTimer
 @onready var attackTimer = $AttackTimer
 @onready var sword: Area2D = $Sword
-@onready var dash_timer: Timer = $DashTimer
 @onready var tumble_timer: Timer = $TumbleTimer
 @onready var damaged_timer: Timer = $DamagedTimer
 @onready var health_node: HealthNode = $HealthNode
+@onready var respawn_timer: Timer = $RespawnTimer
+@onready var state_label: Label = $StateLabel
+@onready var player_loot: Node = $PlayerLoot
 
+
+
+func _ready() -> void:
+	reset()
 
 var previousState: GlobalEnums.CharacterState = GlobalEnums.CharacterState.IDLE
 var state: GlobalEnums.CharacterState = GlobalEnums.CharacterState.IDLE:
@@ -52,18 +63,29 @@ var state: GlobalEnums.CharacterState = GlobalEnums.CharacterState.IDLE:
 		return state
 		
 	set(value):
-		if value != state:
+		if value != state and autoStateChangeGuard(value):
 			stateTransition(value)
 			previousState = state
 			state = value
 			state_changed.emit(state)
 
+func collect_coins(amount: int):
+	player_loot.modify_coins(amount)
+	coins.emit(player_loot.coins)
+
+func collect_diamonds(amount: int):
+	player_loot.modify_diamonds(amount)
+	diamonds.emit(player_loot.diamonds)
+
+func get_coins() -> int:
+	return player_loot.coins
+	
+func get_diamonds() -> int:
+	return player_loot.diamonds
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
-		
-			
 		var gravity: Vector2 = get_gravity() * gravity_multiplier
 		if state == GlobalEnums.CharacterState.FALL:
 			gravity *= 1.5
@@ -71,7 +93,6 @@ func _physics_process(delta: float) -> void:
 	
 	
 	handleDirection()
-	dash_timer.direction_input(get_dash_input())
 	determinState()
 	doLateralMovement(delta)
 	
@@ -100,14 +121,6 @@ func doLateralMovement(delta: float):
 		
 func get_speed() -> float:
 	return SPEED * SPEED_BOOST
-func get_dash_input() -> int:
-	var output = 0
-	if Input.is_action_just_pressed("DIR_RIGHT"):
-		output += 1
-	elif Input.is_action_just_pressed("DIR_LEFT"):
-		output -= 1
-	return output
-	
 
 func doJump(next_state: int) -> int:
 	gravity_multiplier = 1
@@ -118,14 +131,17 @@ func doJump(next_state: int) -> int:
 
 
 func handleDirection():
-	direction = Input.get_axis("DIR_LEFT", "DIR_RIGHT")
-	if direction > 0:
-		facing_direction = true
-		
-	elif direction < 0:
-		facing_direction = false
-		
-	direction_changed.emit(direction)
+	if ACCEPT_INPUT:
+		direction = Input.get_axis("DIR_LEFT", "DIR_RIGHT")
+		if direction > 0:
+			facing_direction = true
+			
+		elif direction < 0:
+			facing_direction = false
+			
+		direction_changed.emit(direction)
+	else:
+		direction = 0.0
 	
 
 func handleAttack(next_state: int) -> int:
@@ -182,6 +198,11 @@ func determinState():
 	# Process combo inputs 1st
 	var combo: bool = false
 	var has_input: bool = false
+	
+	if not ACCEPT_INPUT:
+		direction = 0
+		return
+	
 	if Input.is_action_pressed("DIR_DOWN"):
 		
 		if state == GlobalEnums.CharacterState.FALL:
@@ -229,14 +250,19 @@ func determinState():
 		else:
 			next_state = GlobalEnums.CharacterState.JUMP
 	
-	if autoStateChangeGuard(next_state):
-		state = next_state
+	
+	state = next_state
 
 func is_attack_state(state_value: int):
 	return state_value == GlobalEnums.CharacterState.ATTACK1 or state_value == GlobalEnums.CharacterState.ATTACK2 or state_value == GlobalEnums.CharacterState.ATTACK3
 
 func autoStateChangeGuard(next_state) -> bool:
-	return AS2d.is_animation_finished()
+	if state == GlobalEnums.CharacterState.RESPAWN:
+		return next_state == GlobalEnums.CharacterState.READY
+	elif state == GlobalEnums.CharacterState.DYING:
+		return next_state == GlobalEnums.CharacterState.RESPAWN
+	else:
+		return AS2d.is_animation_finished(next_state)
 
 func is_attack(current_state: int) -> bool:
 	return current_state == GlobalEnums.CharacterState.ATTACK1 or current_state == GlobalEnums.CharacterState.ATTACK2 or current_state == GlobalEnums.CharacterState.ATTACK3 or current_state == GlobalEnums.CharacterState.ATTACK4
@@ -256,6 +282,9 @@ func canJump():
 	if tempJump:
 		jump_count +=1
 	return tempJump
+
+func getVelocityPercentage() -> float:
+	return abs(velocity.x) / SPEED
 
 		
 func stateTransition(next_state: GlobalEnums.CharacterState):
@@ -280,26 +309,39 @@ func stateTransition(next_state: GlobalEnums.CharacterState):
 	else:
 		if damaged_timer.is_stopped():
 			health_node.INVINSIBLE = false
+			
+	# Handle Dying State
+	if next_state == GlobalEnums.CharacterState.DYING:
+		ACCEPT_INPUT = false
 
 func _on_attack_timer_timeout() -> void:
 	attack_count = 0 # Replace with function body.
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	pass
-
-
+	var current_animation = AS2d.animation
+	if current_animation == "Dying":
+		died.emit(health_node.health)
+		
 func _on_stomp_attack_area_stomp(dead: bool) -> void:
 	state = doJump(state)# Replace with function body.
 
-
-func _on_dash_timer_dash() -> void:
-	if facing_direction:
-		velocity.x = 1 * 3000
+func hit(damage: float) -> float:
+	if state == GlobalEnums.CharacterState.DYING or state == GlobalEnums.CharacterState.RESPAWN:
+		return health_node.health
 	else:
-		velocity.x = -1 * 3000
+		return health_node.hit(damage)
+		
+
+func _on_dash_combo_activated() -> void:
+	if facing_direction:
+		velocity.x += 1 * LATERAL_DASH_VELOCITY
+	else:
+		velocity.x += -1 * LATERAL_DASH_VELOCITY
+	health_node.INVINSIBLE = true
 	move_and_slide()
-	 # Replace with function body.
+	health_node.INVINSIBLE = false
+	
 
 func _on_tumble_timer_timeout() -> void:
 	state = GlobalEnums.CharacterState.RUN
@@ -314,17 +356,34 @@ func _on_tumble_attack_tumbled(dead: bool) -> void:
 			velocity.x += 1 * TUMBLE_BOUNCE_BACK
 
 
-func _on_health_node_died() -> void:
-	died.emit(0.0) # Replace with function body.
-
-
 func _on_health_node_damaged(health: float, delta: float) -> void:
-	damaged_timer.start()
-	state = GlobalEnums.CharacterState.HIT
-	health_node.INVINSIBLE = true
-	#set_collision_layer_value(2, false)
-	damaged.emit(health, delta) # Replace with function body.
+	if health > 0:
+		damaged_timer.start()
+		state = GlobalEnums.CharacterState.HIT
+		health_node.INVINSIBLE = true
+		#set_collision_layer_value(2, false)
+		damaged.emit(health, delta) # Replace with function body.
+	else:
+		health_node.INVINSIBLE = true
+		ACCEPT_INPUT = false
+		set_collision_layer_value(2, false)
+		set_collision_mask_value(2, false)
+		set_collision_mask_value(3, false)
+		set_collision_mask_value(4, false)
+		state = GlobalEnums.CharacterState.DYING
 
+func reset():
+	set_collision_layer_value(2, true)
+	set_collision_mask_value(2, true)
+	set_collision_mask_value(3, true)
+	set_collision_mask_value(4, true)
+	health_node.reset()
+	ACCEPT_INPUT = true
+	state = GlobalEnums.CharacterState.READY
+	
+func respawn():
+	state = GlobalEnums.CharacterState.RESPAWN
+	respawn_timer.start()
 
 func _on_health_node_changed(health: float, delta: float) -> void:
 	health_changed.emit(health, delta) # Replace with function body.
@@ -341,3 +400,7 @@ func _on_health_node_armor_changed(armor: float) -> void:
 func _on_damaged_timer_timeout() -> void:
 	health_node.INVINSIBLE = false
 	#set_collision_layer_value(2, true) # Replace with function body.
+
+
+func _on_respawn_timer_timeout() -> void:
+	reset() # Replace with function body.

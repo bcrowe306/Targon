@@ -1,0 +1,137 @@
+[gd_scene load_steps=19 format=3 uid="uid://da4m7qyooxclw"]
+
+[ext_resource type="Script" uid="uid://ct58c7y6121vd" path="res://armor_item.gd" id="1_xpli6"]
+[ext_resource type="Texture2D" uid="uid://cw8gg7byprpsb" path="res://resources/Assets/Shield.png" id="2_igwd6"]
+[ext_resource type="AudioStream" uid="uid://ypovr8ao1jv2" path="res://resources/sfx/BellSuspense.wav" id="3_ch0v5"]
+[ext_resource type="AudioStream" uid="uid://besovt2rk5rir" path="res://resources/sfx/ClothesSyntheticfabric3.wav" id="4_tq6xc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rklmr"]
+radius = 17.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w08vf"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xr4eq"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xyksy"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81ohn"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mejks"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3lx7"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vaam"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oepdw"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6iido"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72ms3"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1gwck"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w08vf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xr4eq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xyksy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_81ohn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mejks")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3lx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vaam")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oepdw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6iido")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_72ms3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ch0v5"]
+atlas = ExtResource("2_igwd6")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="Gradient" id="Gradient_tq6xc"]
+offsets = PackedFloat32Array(0.609929, 0.801418)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="ArmorItem" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_xpli6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rklmr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1gwck")
+frame_progress = 0.709839
+
+[node name="ArmorTimer" type="Timer" parent="."]
+
+[node name="ArmorSFX1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ch0v5")
+volume_db = -22.328
+
+[node name="ArmorParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 18
+texture = SubResource("AtlasTexture_ch0v5")
+lifetime = 0.55
+one_shot = true
+explosiveness = 0.53
+emission_shape = 1
+emission_sphere_radius = 9.53
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 100)
+initial_velocity_min = 84.86
+initial_velocity_max = 84.86
+scale_amount_min = 0.2
+scale_amount_max = 0.2
+color_ramp = SubResource("Gradient_tq6xc")
+
+[node name="ArmorSFX2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_tq6xc")
+volume_db = -7.849
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="ArmorTimer" to="." method="_on_armor_timer_timeout"]

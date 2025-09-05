@@ -13,10 +13,3 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _on_ready() -> void:
 	monitoring = false # Replace with function body.
-
-
-func _on_player_state_changed(state: int) -> void:
-	if state == GlobalEnums.CharacterState.TUMBLE:
-		monitoring = true
-	else:
-		monitoring = false # Replace with function body.
